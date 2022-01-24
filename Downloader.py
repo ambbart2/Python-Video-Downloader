@@ -1,9 +1,10 @@
 from pytube import YouTube
 from pytube import exceptions
+from pathlib import Path
 from tkinter import *
 
 # Where to save file
-SAVE_PATH = "$HOME/Downloads"
+SAVE_PATH = str(Path.home()) + "/Downloads"
 
 # Create UI to enter url for download
 ui = Tk()
@@ -26,12 +27,13 @@ status_label.pack(pady=20)
 
 # function to download pasted url
 def download_video():
+    status_label.config(text='Status: DOWNLOADING..')
+
     try:
         url = YouTube(str(link.get()))
-        print(url.title)
+        print("Found Video: {}".format(url.title))
         # ys = url.streams.get_highest_resolution()
         ys = url.streams.first()
-        status_label.config(text='Status: Downloading..')
         ys.download(SAVE_PATH)
         status_label.config(text='Status: DOWNLOAD COMPLETE')
     except exceptions.RegexMatchError:
